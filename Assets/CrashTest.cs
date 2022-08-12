@@ -41,6 +41,9 @@ public class CrashTest : MonoBehaviour
 
     public void HardCrash()
     {
+        // Creating mesh from other thread is not safe but this is intentional in this case. 
+        // Running Mesh constructor concurrently on different threads will lead to SIGSEGV in Unity Engine
+
         for (int i = 0; i < 5; i++)
             Task.Run(() => CrashMethod())
                 .ContinueWith(t => Debug.LogException(t.Exception), TaskContinuationOptions.OnlyOnFaulted);
